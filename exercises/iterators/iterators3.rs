@@ -25,17 +25,15 @@ pub struct NotDivisibleError {
 // Otherwise, return a suitable error.
 pub fn divide(a: i32, b: i32) -> Result<i32, DivisionError> {
     if b == 0 {
-        Err(DivisionError::DivideByZero);
-    }
-
-    if a % b != 0 {
+        Err(DivisionError::DivideByZero)
+    } else if a % b == 0 {
+        Ok(a / b)
+    } else {
         Err(DivisionError::NotDivisible(NotDivisibleError {
             dividend: a,
             divisor: b,
-        }));
+        }))
     }
-
-    Ok(a / b)
 }
 
 // Complete the function and return a value of the correct type so the test
@@ -44,7 +42,7 @@ pub fn divide(a: i32, b: i32) -> Result<i32, DivisionError> {
 fn result_with_list() -> Result<Vec<i32>, DivisionError> {
     let numbers = vec![27, 297, 38502, 81];
     let division_results = numbers.into_iter().map(|n| divide(n, 27));
-    division_results.filter(|x| x.is_ok()).collect()
+    division_results.collect()
 }
 
 // Complete the function and return a value of the correct type so the test
@@ -53,9 +51,7 @@ fn result_with_list() -> Result<Vec<i32>, DivisionError> {
 fn list_of_results() -> Vec<Result<i32, DivisionError>> {
     let numbers = vec![27, 297, 38502, 81];
     let division_results = numbers.into_iter().map(|n| divide(n, 27));
-    division_results
-        .filter(|x| x.is_ok())
-        .collect::<Vec<Result<i32, DivisionError>>>()
+    division_results.collect()
 }
 
 #[cfg(test)]
